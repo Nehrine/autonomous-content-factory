@@ -110,30 +110,30 @@ http://localhost:5173
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                   Frontend (React/Vite)                  │
+│                   Frontend (React/Vite)                 │
 │  UploadPage → PipelinePage (Agent Room) → ResultsPage   │
 └────────────────────────┬────────────────────────────────┘
                          │ HTTP (proxied)
 ┌────────────────────────▼────────────────────────────────┐
-│                  Backend (FastAPI)                        │
+│                  Backend (FastAPI)                      │
 │  POST /api/upload  →  parse PDF/TXT/DOCX                │
 │  POST /api/run-pipeline  →  3-agent pipeline            │
 │  POST /api/regenerate-json  →  single content piece     │
 │  POST /api/export  →  ZIP download                      │
 └────────┬──────────────────────────────────┬─────────────┘
          │                                  │
-┌────────▼────────┐  ┌──────────────┐  ┌───▼──────────────┐
-│  Research Agent │  │  Copywriter  │  │  Editor Agent    │
-│  Fact Sheet JSON│→ │  Blog+Social │→ │  Approve/Reject  │
-│  No hallucination│  │  +Email      │  │  Scores content  │
-└─────────────────┘  └──────────────┘  └──────────────────┘
+┌────────▼─────────┐  ┌──────────────┐  ┌───▼──────────────┐
+│  Research Agent  │  │  Copywriter  │  │  Editor Agent    │
+│  Fact Sheet JSON │→ │  Blog+Social │→ │  Approve/Reject  │
+│  No hallucination│  │   +Email     │  │  Scores content  │
+└──────────────────┘  └──────────────┘  └──────────────────┘
          │                   │                   │
          └───────────────────┴───────────────────┘
                          │
-              ┌──────────▼──────────┐
-              │   AI Client Wrapper │
-              │  Gemini  │  OpenAI  │
-              └─────────────────────┘
+              ┌──────────▼────────────────┐
+              │   AI Client Wrapper       │
+              │  Gemini  │  OpenAI │ GROQ │
+              └───────────────────────────┘
 ```
 
 \---
@@ -146,12 +146,12 @@ autonomous-content-factory/
 │   ├── main.py                  # FastAPI app + all routes
 │   ├── requirements.txt
 │   ├── agents/
-│   │   ├── research\\\\\\\_agent.py
-│   │   ├── copywriter\\\\\\\_agent.py
-│   │   └── editor\\\\\\\_agent.py
+│   │   ├── research_agent.py
+│   │   ├── copywriter_agent.py
+│   │   └── editor_agent.py
 │   └── utils/
-│       ├── ai\\\\\\\_client.py         # Gemini + OpenAI wrapper
-│       └── file\\\\\\\_parser.py       # PDF/TXT/DOCX parser
+│       ├── ai_client.py         # Gemini + OpenAI wrapper
+│       └── file_parser.py       # PDF/TXT/DOCX parser
 └── frontend/
     ├── index.html
     ├── vite.config.js
@@ -176,7 +176,7 @@ autonomous-content-factory/
 
 \---
 
-## ⚙️ Configuration
+## Configuration
 
 |Setting|Where|Description|
 |-|-|-|
@@ -218,7 +218,7 @@ autonomous-content-factory/
 
 ## Export
 
-Click **"Export Campaign Kit"** to download a `campaign\\\\\\\_kit.zip` containing:
+Click **"Export Campaign Kit"** to download a `campaign_kit.zip` containing:
 
 * `blog.txt` — full blog post
 * `social.txt` — all 5 social posts
@@ -231,11 +231,13 @@ Click **"Export Campaign Kit"** to download a `campaign\\\\\\\_kit.zip` containi
 
 * **Frontend**: React 18 + Vite + Tailwind CSS + Zustand
 * **Backend**: FastAPI + Uvicorn
-<<<<<<< HEAD
 * **AI**: google-genai SDK (Gemini) / openai SDK / Groq API
-=======
-* **AI**: google-genai SDK (Gemini) / openai SDK /Groq 
->>>>>>> 91cf80f (Update README)
 * **Parsing**: PyPDF2, python-docx
 * **Fonts**: Syne (display), DM Sans (body), JetBrains Mono
+  
+\---
 
+## Live Demo
+
+* Frontend: https://autonomous-content-factory-sepia.vercel.app/
+* Backend:  https://content-factory-backend-6n9m.onrender.com
