@@ -2,6 +2,35 @@
 
 A production-ready multi-agent AI marketing pipeline that transforms any document into a full content campaign using three specialized AI agents.
 
+## Solution
+
+The Autonomous Content Factory solves the problem of content inconsistency and creative burnout by introducing a multi-agent AI pipeline that automates the entire content creation process from a single input document.
+
+Instead of manually rewriting content for different platforms, the system uses specialized AI agents that work together in a structured workflow:
+
+## Agent Descriptions
+
+### 1\. Research Agent (`research_agent.py`)
+
+* Parses raw document text
+* Extracts: product name, features, specs, target audience, value proposition
+* Flags ambiguous or unverifiable claims
+* Produces structured JSON fact sheet
+* **Rule**: Zero hallucination — only uses source document
+
+### 2\. Copywriter Agent (`copywriter_agent.py`)
+
+* Takes fact sheet as input
+* Generates: 500-word blog post, 5 social posts (≤280 chars), email teaser
+* Tone is dynamically controlled (professional/casual/formal/friendly/persuasive)
+* Creativity slider adjusts temperature and style guidance
+
+### 3\. Editor-in-Chief Agent (`editor_agent.py`)
+
+* Cross-checks content against fact sheet
+* Detects hallucinated features, fake claims, tone mismatches
+* Returns approval status + scores (accuracy, tone, completeness)
+* If rejected, copywriter auto-revises with correction note
 \---
 
 ## Quick Start (After Extracting ZIP)
@@ -15,6 +44,7 @@ Make sure you have installed:
 * A **Gemini API Key** (free) → https://aistudio.google.com/app/apikey
 
   * OR an **OpenAI API Key** → https://platform.openai.com/api-keys
+  * OR a **GROQ API Key** → https://console.groq.com/keys
 
 ### Step 2 — Set Up the Backend
 
@@ -67,7 +97,7 @@ http://localhost:5173
 
 ### Step 5 — Use the App
 
-1. **Select API Provider** — Choose Gemini (recommended) or OpenAI
+1. **Select API Provider** — Choose GROQ (recommended) or OpenAI or Gemini
 2. **Enter your API Key** — Paste your key (it stays in your browser, never stored)
 3. **Choose a Model** — Default is `gemini-2.0-flash` (fast + capable)
 4. **Upload a Document** — PDF, TXT, or DOCX (product spec, brief, etc.)
@@ -105,30 +135,6 @@ http://localhost:5173
               │  Gemini  │  OpenAI  │
               └─────────────────────┘
 ```
-
-## Agent Descriptions
-
-### 1\. Research Agent (`research\\\\\\\_agent.py`)
-
-* Parses raw document text
-* Extracts: product name, features, specs, target audience, value proposition
-* Flags ambiguous or unverifiable claims
-* Produces structured JSON fact sheet
-* **Rule**: Zero hallucination — only uses source document
-
-### 2\. Copywriter Agent (`copywriter\\\\\\\_agent.py`)
-
-* Takes fact sheet as input
-* Generates: 500-word blog post, 5 social posts (≤280 chars), email teaser
-* Tone is dynamically controlled (professional/casual/formal/friendly/persuasive)
-* Creativity slider adjusts temperature and style guidance
-
-### 3\. Editor-in-Chief Agent (`editor\\\\\\\_agent.py`)
-
-* Cross-checks content against fact sheet
-* Detects hallucinated features, fake claims, tone mismatches
-* Returns approval status + scores (accuracy, tone, completeness)
-* If rejected, copywriter auto-revises with correction note
 
 \---
 
