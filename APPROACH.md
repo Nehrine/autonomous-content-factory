@@ -72,19 +72,7 @@ The system follows a **modular, agent-based architecture**:
 The system operates as a sequential pipeline:
 
 
-Input Document
-↓
-Preprocessing
-↓
-Research Agent (Fact Extraction)
-↓
-Copywriter Agent (Content Generation)
-↓
-Editor Agent (Evaluation)
-↓
-Revision Loop (if needed)
-↓
-Final Output (Approved Content)
+Input → Preprocessing → Research → Copywriter → Editor → Revision → Output
 
 
 ---
