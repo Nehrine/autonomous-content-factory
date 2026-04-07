@@ -69,7 +69,7 @@ http://localhost:5173
 
 1. **Select API Provider** — Choose Gemini (recommended) or OpenAI
 2. **Enter your API Key** — Paste your key (it stays in your browser, never stored)
-3. **Choose a Model** — Default is `gemini-2.5-flash` (fast + capable)
+3. **Choose a Model** — Default is `gemini-2.0-flash` (fast + capable)
 4. **Upload a Document** — PDF, TXT, or DOCX (product spec, brief, etc.)
 5. **Click "Start Campaign"** — Watch three agents work in real time
 6. **Review \& Export** — Edit, regenerate specific pieces, download ZIP
@@ -225,7 +225,7 @@ Click **"Export Campaign Kit"** to download a `campaign\\\\\\\_kit.zip` containi
 
 * **Frontend**: React 18 + Vite + Tailwind CSS + Zustand
 * **Backend**: FastAPI + Uvicorn
-* **AI**: google-genai SDK (Gemini) / openai SDK
+* **AI**: google-genai SDK (Gemini) / openai SDK / Groq API
 * **Parsing**: PyPDF2, python-docx
 * **Fonts**: Syne (display), DM Sans (body), JetBrains Mono
 
