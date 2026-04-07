@@ -231,7 +231,11 @@ Click **"Export Campaign Kit"** to download a `campaign\\\\\\\_kit.zip` containi
 
 * **Frontend**: React 18 + Vite + Tailwind CSS + Zustand
 * **Backend**: FastAPI + Uvicorn
+<<<<<<< HEAD
 * **AI**: google-genai SDK (Gemini) / openai SDK / Groq API
+=======
+* **AI**: google-genai SDK (Gemini) / openai SDK /Groq 
+>>>>>>> 91cf80f (Update README)
 * **Parsing**: PyPDF2, python-docx
 * **Fonts**: Syne (display), DM Sans (body), JetBrains Mono
 
