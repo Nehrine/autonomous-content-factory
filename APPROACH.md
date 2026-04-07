@@ -1,231 +1,180 @@
-# Autonomous Content Factory
+# Approach Document — Autonomous Content Factory
 
-A production-ready multi-agent AI marketing pipeline that transforms any document into a full content campaign using three specialized AI agents.
+---
 
-\---
+## 1. Problem Statement
 
-## Quick Start (After Extracting ZIP)
+Modern marketing teams face two major challenges:
 
-### Step 1 — Prerequisites
+- **Creative Burnout**: Constantly rewriting the same content for different platforms (blogs, social media, emails)
+- **Content Inconsistency**: Variations in tone, messaging, and quality across channels
 
-Make sure you have installed:
+Traditional workflows require manual effort to adapt a single source document into multiple formats, leading to:
+- Time inefficiency  
+- Human error  
+- Generic or low-quality outputs  
 
-* **Python 3.10+** → https://python.org
-* **Node.js 18+** → https://nodejs.org
-* A **Gemini API Key** (free) → https://aistudio.google.com/app/apikey
+---
 
-  * OR an **OpenAI API Key** → https://platform.openai.com/api-keys
+## 2. Solution Overview
 
-### Step 2 — Set Up the Backend
+The **Autonomous Content Factory** addresses these challenges by introducing a **multi-agent AI system** that transforms a single input document into a complete, high-quality multi-channel content campaign.
 
-Open a terminal and run:
+Instead of relying on a single AI call, the system breaks the process into **specialized agents**, each responsible for a specific task:
+- Extracting facts  
+- Generating content  
+- Evaluating and improving quality  
 
-```bash
-cd autonomous-content-factory/backend
+This structured approach ensures **accuracy, consistency, and scalability**.
 
-# Create a virtual environment (recommended)
-python -m venv venv
+---
 
-# Activate it:
-# On Windows:
-venv\\\\\\\\Scripts\\\\\\\\activate
-# On macOS/Linux:
-source venv/bin/activate
+## 3. System Architecture
 
-# Install dependencies
-pip install -r requirements.txt
+The system follows a **modular, agent-based architecture**:
 
-# Start the backend server
-uvicorn main:app --reload --port 8000
-```
+### Research Agent
+- Extracts structured information from the input document  
+- Identifies:
+  - Product name  
+  - Features  
+  - Benefits  
+  - Specifications  
+- Ensures all downstream content is grounded in factual data  
 
-You should see: `Uvicorn running on http://127.0.0.1:8000`
+---
 
-### Step 3 — Set Up the Frontend
+### Copywriter Agent
+- Generates content for multiple formats:
+  - Blog (long-form)
+  - Social media thread
+  - Email teaser  
+- Applies **tone customization per content type**
+- Uses only the extracted fact sheet to avoid hallucination  
 
-Open a **second terminal** window:
+---
 
-```bash
-cd autonomous-content-factory/frontend
+### Editor Agent
+- Acts as a strict quality controller  
+- Evaluates content using a defined rubric:
+  - Accuracy  
+  - Specificity  
+  - Engagement  
+  - CTA Strength  
 
-# Install Node dependencies
-npm install
+- Provides **structured, actionable feedback**
+- Rejects content that does not meet quality standards  
 
-# Start the frontend dev server
-npm run dev
-```
+---
 
-You should see: `Local: http://localhost:5173`
+## 4. Workflow Pipeline
 
-### Step 4 — Open the App
+The system operates as a sequential pipeline:
 
-Open your browser and go to:
 
-```
-http://localhost:5173
-```
+Input Document
+↓
+Preprocessing
+↓
+Research Agent (Fact Extraction)
+↓
+Copywriter Agent (Content Generation)
+↓
+Editor Agent (Evaluation)
+↓
+Revision Loop (if needed)
+↓
+Final Output (Approved Content)
 
-### Step 5 — Use the App
 
-1. **Select API Provider** — Choose Gemini (recommended) or OpenAI
-2. **Enter your API Key** — Paste your key (it stays in your browser, never stored)
-3. **Choose a Model** — Default is `gemini-2.5-flash` (fast + capable)
-4. **Upload a Document** — PDF, TXT, or DOCX (product spec, brief, etc.)
-5. **Click "Start Campaign"** — Watch three agents work in real time
-6. **Review \& Export** — Edit, regenerate specific pieces, download ZIP
+---
 
-\---
+## 5. Iterative Revision Mechanism
 
-## Architecture
+A key innovation of the system is the **revision loop**:
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                   Frontend (React/Vite)                  │
-│  UploadPage → PipelinePage (Agent Room) → ResultsPage   │
-└────────────────────────┬────────────────────────────────┘
-                         │ HTTP (proxied)
-┌────────────────────────▼────────────────────────────────┐
-│                  Backend (FastAPI)                        │
-│  POST /api/upload  →  parse PDF/TXT/DOCX                │
-│  POST /api/run-pipeline  →  3-agent pipeline            │
-│  POST /api/regenerate-json  →  single content piece     │
-│  POST /api/export  →  ZIP download                      │
-└────────┬──────────────────────────────────┬─────────────┘
-         │                                  │
-┌────────▼────────┐  ┌──────────────┐  ┌───▼──────────────┐
-│  Research Agent │  │  Copywriter  │  │  Editor Agent    │
-│  Fact Sheet JSON│→ │  Blog+Social │→ │  Approve/Reject  │
-│  No hallucination│  │  +Email      │  │  Scores content  │
-└─────────────────┘  └──────────────┘  └──────────────────┘
-         │                   │                   │
-         └───────────────────┴───────────────────┘
-                         │
-              ┌──────────▼──────────┐
-              │   AI Client Wrapper │
-              │  Gemini  │  OpenAI  │
-              └─────────────────────┘
-```
+- The Editor Agent provides feedback on generated content  
+- The Copywriter Agent revises content based on feedback  
+- This process repeats for a configurable number of iterations  
 
-## Agent Descriptions
+Unlike basic systems:
+- **All content pieces are improved**, not just rejected ones  
+- Feedback is **specific and actionable**, not generic  
+- Quality increases progressively across iterations  
 
-### 1\. Research Agent (`research\\\\\\\_agent.py`)
+---
 
-* Parses raw document text
-* Extracts: product name, features, specs, target audience, value proposition
-* Flags ambiguous or unverifiable claims
-* Produces structured JSON fact sheet
-* **Rule**: Zero hallucination — only uses source document
+## 6. Intelligent Scoring System
 
-### 2\. Copywriter Agent (`copywriter\\\\\\\_agent.py`)
+The system includes a **dimension-based scoring mechanism**:
 
-* Takes fact sheet as input
-* Generates: 500-word blog post, 5 social posts (≤280 chars), email teaser
-* Tone is dynamically controlled (professional/casual/formal/friendly/persuasive)
-* Creativity slider adjusts temperature and style guidance
+Each content piece is evaluated on:
+- Accuracy (fact correctness)  
+- Specificity (non-generic, product-focused content)  
+- Engagement (reader interest and flow)  
+- CTA Strength (clarity and urgency of action)  
 
-### 3\. Editor-in-Chief Agent (`editor\\\\\\\_agent.py`)
+### Key Improvements:
+- Uses **calibrated scoring (1–10 scale)**  
+- Avoids inflated or static scores  
+- Aggregates scores across content intelligently  
 
-* Cross-checks content against fact sheet
-* Detects hallucinated features, fake claims, tone mismatches
-* Returns approval status + scores (accuracy, tone, completeness)
-* If rejected, copywriter auto-revises with correction note
+This provides **transparent quality evaluation**.
 
-\---
+---
 
-## 📁 Project Structure
+## 7. Multi-Provider AI Integration
 
-```
-autonomous-content-factory/
-├── backend/
-│   ├── main.py                  # FastAPI app + all routes
-│   ├── requirements.txt
-│   ├── agents/
-│   │   ├── research\\\\\\\_agent.py
-│   │   ├── copywriter\\\\\\\_agent.py
-│   │   └── editor\\\\\\\_agent.py
-│   └── utils/
-│       ├── ai\\\\\\\_client.py         # Gemini + OpenAI wrapper
-│       └── file\\\\\\\_parser.py       # PDF/TXT/DOCX parser
-└── frontend/
-    ├── index.html
-    ├── vite.config.js
-    ├── tailwind.config.js
-    ├── package.json
-    └── src/
-        ├── App.jsx
-        ├── main.jsx
-        ├── index.css
-        ├── store/
-        │   └── useStore.js      # Zustand global state
-        ├── pages/
-        │   ├── UploadPage.jsx
-        │   ├── PipelinePage.jsx
-        │   └── ResultsPage.jsx
-        ├── components/
-        │   ├── Header.jsx
-        │   └── Sidebar.jsx
-        └── utils/
-            └── api.js           # Frontend API calls
-```
+The system supports multiple AI providers:
 
-\---
+- **Gemini (Google)**  
+- **Groq (high-speed inference)**
+- **Openai SDK** 
 
-## ⚙️ Configuration
+### Benefits:
+- Flexibility in model selection  
+- Higher reliability during API limits  
+- Faster performance with Groq  
+- Easier experimentation and scalability  
 
-|Setting|Where|Description|
-|-|-|-|
-|API Key|Browser UI|Entered per-session, never stored on server|
-|API Provider|Browser UI|Gemini or OpenAI|
-|Model|Browser UI|Choose from dropdown|
-|Tone|Sidebar|5 tone options|
-|Creativity|Sidebar slider|0% (safe) → 100% (creative)|
-|Content Types|Sidebar checkboxes|Blog / Social / Email|
+---
 
-\---
+## 8. Key Innovations
 
-## 🔧 Troubleshooting
+- Multi-agent architecture instead of single AI call  
+- Structured fact extraction to reduce hallucination  
+- Per-content tone customization  
+- Iterative revision loop for continuous improvement  
+- Realistic, multi-dimensional scoring system  
+- Multi-provider AI support (Gemini + Groq+Openai)  
 
-**Backend won't start?**
+---
 
-* Make sure you activated your virtualenv
-* Run `pip install -r requirements.txt` again
+## 9. Outcome
 
-**"API key is required" error?**
+The system transforms a single source document into:
 
-* Make sure you entered your key in the API Configuration box on the upload page
+- A structured blog post  
+- A social media thread  
+- A marketing email  
 
-**"Could not parse file" error?**
+All outputs are:
+- Factually accurate  
+- Consistent in messaging  
+- Optimized for engagement  
+- Ready for publishing  
 
-* Ensure the file is not password-protected
-* For PDFs, ensure they contain real text (not scanned images)
+---
 
-**CORS errors in browser?**
+## 10. Conclusion
 
-* Make sure both servers are running (port 8000 and 5173)
-* The Vite dev server proxies `/api` to `localhost:8000` automatically
+The **Autonomous Content Factory** demonstrates how AI systems can move beyond simple generation into **structured, collaborative workflows**.
 
-**Frontend styles broken?**
+By combining:
+- Specialized agents  
+- Iterative refinement  
+- Quality enforcement  
 
-* Run `npm install` inside the `frontend/` folder
+the system delivers **high-quality, scalable, and reliable content generation**, solving real-world marketing challenges effectively.
 
-\---
-
-## Export
-
-Click **"Export Campaign Kit"** to download a `campaign\\\\\\\_kit.zip` containing:
-
-* `blog.txt` — full blog post
-* `social.txt` — all 5 social posts
-* `email.txt` — email teaser paragraph
-* `factsheet.json` — structured product data
-
-\---
-
-## Tech Stack
-
-* **Frontend**: React 18 + Vite + Tailwind CSS + Zustand
-* **Backend**: FastAPI + Uvicorn
-* **AI**: google-genai SDK (Gemini) / openai SDK /Groq 
-* **Parsing**: PyPDF2, python-docx
-* **Fonts**: Syne (display), DM Sans (body), JetBrains Mono
-
+---
