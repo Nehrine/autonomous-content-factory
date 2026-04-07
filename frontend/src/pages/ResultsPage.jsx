@@ -91,7 +91,7 @@ export default function ResultsPage() {
         <span style={{ fontSize:'0.78rem', fontWeight:600 }}>{approved ? 'Editor approved all content' : 'Editor applied revisions'}</span>
         {editorResult?.scores && (
           <span className="font-mono" style={{ fontSize:'0.67rem', opacity:0.7, marginLeft:8 }}>
-            accuracy {editorResult.scores.accuracy}/10 · tone {editorResult.scores.tone}/10 · completeness {editorResult.scores.completeness}/10
+            accuracy {editorResult.scores.accuracy}/10 · specificity {editorResult.scores.specificity}/10 · engagement {editorResult.scores.engagement}/10 · CTA {editorResult.scores.cta_strength}/10
           </span>
         )}
         {revisionLog.length > 0 && (

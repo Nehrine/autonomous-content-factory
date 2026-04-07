@@ -1,18 +1,20 @@
-# 🏭 Autonomous Content Factory
+# Autonomous Content Factory
 
 A production-ready multi-agent AI marketing pipeline that transforms any document into a full content campaign using three specialized AI agents.
 
----
+\---
 
-## 🚀 Quick Start (After Extracting ZIP)
+## Quick Start (After Extracting ZIP)
 
 ### Step 1 — Prerequisites
 
 Make sure you have installed:
-- **Python 3.10+** → https://python.org
-- **Node.js 18+** → https://nodejs.org
-- A **Gemini API Key** (free) → https://aistudio.google.com/app/apikey
-  - OR an **OpenAI API Key** → https://platform.openai.com/api-keys
+
+* **Python 3.10+** → https://python.org
+* **Node.js 18+** → https://nodejs.org
+* A **Gemini API Key** (free) → https://aistudio.google.com/app/apikey
+
+  * OR an **OpenAI API Key** → https://platform.openai.com/api-keys
 
 ### Step 2 — Set Up the Backend
 
@@ -26,7 +28,7 @@ python -m venv venv
 
 # Activate it:
 # On Windows:
-venv\Scripts\activate
+venv\\\\\\\\Scripts\\\\\\\\activate
 # On macOS/Linux:
 source venv/bin/activate
 
@@ -58,6 +60,7 @@ You should see: `Local: http://localhost:5173`
 ### Step 4 — Open the App
 
 Open your browser and go to:
+
 ```
 http://localhost:5173
 ```
@@ -69,11 +72,11 @@ http://localhost:5173
 3. **Choose a Model** — Default is `gemini-2.5-flash` (fast + capable)
 4. **Upload a Document** — PDF, TXT, or DOCX (product spec, brief, etc.)
 5. **Click "Start Campaign"** — Watch three agents work in real time
-6. **Review & Export** — Edit, regenerate specific pieces, download ZIP
+6. **Review \& Export** — Edit, regenerate specific pieces, download ZIP
 
----
+\---
 
-## 🧩 Architecture
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -103,28 +106,31 @@ http://localhost:5173
               └─────────────────────┘
 ```
 
-## 🤖 Agent Descriptions
+## Agent Descriptions
 
-### 1. Research Agent (`research_agent.py`)
-- Parses raw document text
-- Extracts: product name, features, specs, target audience, value proposition
-- Flags ambiguous or unverifiable claims
-- Produces structured JSON fact sheet
-- **Rule**: Zero hallucination — only uses source document
+### 1\. Research Agent (`research\\\\\\\_agent.py`)
 
-### 2. Copywriter Agent (`copywriter_agent.py`)
-- Takes fact sheet as input
-- Generates: 500-word blog post, 5 social posts (≤280 chars), email teaser
-- Tone is dynamically controlled (professional/casual/formal/friendly/persuasive)
-- Creativity slider adjusts temperature and style guidance
+* Parses raw document text
+* Extracts: product name, features, specs, target audience, value proposition
+* Flags ambiguous or unverifiable claims
+* Produces structured JSON fact sheet
+* **Rule**: Zero hallucination — only uses source document
 
-### 3. Editor-in-Chief Agent (`editor_agent.py`)
-- Cross-checks content against fact sheet
-- Detects hallucinated features, fake claims, tone mismatches
-- Returns approval status + scores (accuracy, tone, completeness)
-- If rejected, copywriter auto-revises with correction note
+### 2\. Copywriter Agent (`copywriter\\\\\\\_agent.py`)
 
----
+* Takes fact sheet as input
+* Generates: 500-word blog post, 5 social posts (≤280 chars), email teaser
+* Tone is dynamically controlled (professional/casual/formal/friendly/persuasive)
+* Creativity slider adjusts temperature and style guidance
+
+### 3\. Editor-in-Chief Agent (`editor\\\\\\\_agent.py`)
+
+* Cross-checks content against fact sheet
+* Detects hallucinated features, fake claims, tone mismatches
+* Returns approval status + scores (accuracy, tone, completeness)
+* If rejected, copywriter auto-revises with correction note
+
+\---
 
 ## 📁 Project Structure
 
@@ -134,12 +140,12 @@ autonomous-content-factory/
 │   ├── main.py                  # FastAPI app + all routes
 │   ├── requirements.txt
 │   ├── agents/
-│   │   ├── research_agent.py
-│   │   ├── copywriter_agent.py
-│   │   └── editor_agent.py
+│   │   ├── research\\\\\\\_agent.py
+│   │   ├── copywriter\\\\\\\_agent.py
+│   │   └── editor\\\\\\\_agent.py
 │   └── utils/
-│       ├── ai_client.py         # Gemini + OpenAI wrapper
-│       └── file_parser.py       # PDF/TXT/DOCX parser
+│       ├── ai\\\\\\\_client.py         # Gemini + OpenAI wrapper
+│       └── file\\\\\\\_parser.py       # PDF/TXT/DOCX parser
 └── frontend/
     ├── index.html
     ├── vite.config.js
@@ -162,57 +168,64 @@ autonomous-content-factory/
             └── api.js           # Frontend API calls
 ```
 
----
+\---
 
 ## ⚙️ Configuration
 
-| Setting | Where | Description |
-|---|---|---|
-| API Key | Browser UI | Entered per-session, never stored on server |
-| API Provider | Browser UI | Gemini or OpenAI |
-| Model | Browser UI | Choose from dropdown |
-| Tone | Sidebar | 5 tone options |
-| Creativity | Sidebar slider | 0% (safe) → 100% (creative) |
-| Content Types | Sidebar checkboxes | Blog / Social / Email |
+|Setting|Where|Description|
+|-|-|-|
+|API Key|Browser UI|Entered per-session, never stored on server|
+|API Provider|Browser UI|Gemini or OpenAI|
+|Model|Browser UI|Choose from dropdown|
+|Tone|Sidebar|5 tone options|
+|Creativity|Sidebar slider|0% (safe) → 100% (creative)|
+|Content Types|Sidebar checkboxes|Blog / Social / Email|
 
----
+\---
 
 ## 🔧 Troubleshooting
 
 **Backend won't start?**
-- Make sure you activated your virtualenv
-- Run `pip install -r requirements.txt` again
+
+* Make sure you activated your virtualenv
+* Run `pip install -r requirements.txt` again
 
 **"API key is required" error?**
-- Make sure you entered your key in the API Configuration box on the upload page
+
+* Make sure you entered your key in the API Configuration box on the upload page
 
 **"Could not parse file" error?**
-- Ensure the file is not password-protected
-- For PDFs, ensure they contain real text (not scanned images)
+
+* Ensure the file is not password-protected
+* For PDFs, ensure they contain real text (not scanned images)
 
 **CORS errors in browser?**
-- Make sure both servers are running (port 8000 and 5173)
-- The Vite dev server proxies `/api` to `localhost:8000` automatically
+
+* Make sure both servers are running (port 8000 and 5173)
+* The Vite dev server proxies `/api` to `localhost:8000` automatically
 
 **Frontend styles broken?**
-- Run `npm install` inside the `frontend/` folder
 
----
+* Run `npm install` inside the `frontend/` folder
 
-## 📦 Export
+\---
 
-Click **"Export Campaign Kit"** to download a `campaign_kit.zip` containing:
-- `blog.txt` — full blog post
-- `social.txt` — all 5 social posts
-- `email.txt` — email teaser paragraph
-- `factsheet.json` — structured product data
+## Export
 
----
+Click **"Export Campaign Kit"** to download a `campaign\\\\\\\_kit.zip` containing:
 
-## 🛠 Tech Stack
+* `blog.txt` — full blog post
+* `social.txt` — all 5 social posts
+* `email.txt` — email teaser paragraph
+* `factsheet.json` — structured product data
 
-- **Frontend**: React 18 + Vite + Tailwind CSS + Zustand
-- **Backend**: FastAPI + Uvicorn
-- **AI**: google-genai SDK (Gemini) / openai SDK
-- **Parsing**: PyPDF2, python-docx
-- **Fonts**: Syne (display), DM Sans (body), JetBrains Mono
+\---
+
+## Tech Stack
+
+* **Frontend**: React 18 + Vite + Tailwind CSS + Zustand
+* **Backend**: FastAPI + Uvicorn
+* **AI**: google-genai SDK (Gemini) / openai SDK
+* **Parsing**: PyPDF2, python-docx
+* **Fonts**: Syne (display), DM Sans (body), JetBrains Mono
+

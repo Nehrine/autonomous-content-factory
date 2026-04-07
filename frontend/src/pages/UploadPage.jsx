@@ -4,9 +4,10 @@ import { uploadFile, runPipeline, fetchConfig } from '../utils/api'
 import { Upload, FileText, Play, Sparkles, ChevronDown, CheckCircle, AlertCircle, PenLine, FileUp, Type, RefreshCw } from 'lucide-react'
 
 const PROVIDERS = [
-  { id:'gemini', label:'Gemini',  emoji:'🔵', models:['gemini-2.5-flash','gemini-2.0-flash','gemini-1.5-pro'], envVar:'GEMINI_API_KEY' },
+  { id:'gemini', label:'Gemini',  emoji:'🔵', models:['gemini-2.0-flash ','gemini-2.0-flash','gemini-1.5-pro'], envVar:'GEMINI_API_KEY' },
   { id:'claude', label:'Claude',  emoji:'🟣', models:['claude-sonnet-4-5','claude-opus-4-5','claude-haiku-4-5-20251001'], envVar:'ANTHROPIC_API_KEY' },
   { id:'openai', label:'OpenAI',  emoji:'🟢', models:['gpt-4o-mini','gpt-4o','gpt-3.5-turbo'], envVar:'OPENAI_API_KEY' },
+  { id:'groq',   label:'Groq',    emoji:'🟠', models:['llama-3.3-70b-versatile','llama-3.1-8b-instant','mixtral-8x7b-32768'], envVar:'GROQ_API_KEY' },
 ]
 const TONES = ['professional','formal','casual','friendly','persuasive']
 const CONTENT = [
@@ -58,7 +59,11 @@ export default function UploadPage() {
 
   const prov = PROVIDERS.find(p => p.id === apiProvider) || PROVIDERS[0]
   const effModel = modelName || prov.models[0]
-  const envOk = apiProvider === 'gemini' ? cfg.gemini_configured : apiProvider === 'claude' ? cfg.claude_configured : cfg.openai_configured
+  const envOk = 
+    apiProvider === 'gemini' ? cfg.gemini_configured :
+    apiProvider === 'claude' ? cfg.claude_configured :
+    apiProvider === 'groq'   ? cfg.groq_configured   :
+    cfg.openai_configured
   const hasInput = inputMode === 'file' ? !!file : rawText.trim().length > 20
   const canStart = hasInput && envOk && !loading && selectedContent.length > 0
 
@@ -93,12 +98,18 @@ export default function UploadPage() {
       setDocument(docText, docName)
 
       // Research
+      // Research (improved realistic flow)
       setPipelineStage('researching')
       setAgentStatus('research','thinking')
-      addLog('Research Agent', 'Scanning document for facts...', 'agent')
-      await sleep(400)
+      addLog('Research Agent', 'Gathering insights...', 'agent')
+      await sleep(600)
+
       setAgentStatus('research','processing')
-      addLog('Research Agent', 'Extracting product details...', 'agent')
+      addLog('Research Agent', 'Analyzing document structure...', 'agent')
+      await sleep(600)
+
+      setAgentStatus('research','processing')
+      addLog('Research Agent', 'Extracting product facts...', 'agent')
 
       const result = await runPipeline({
         document_text: docText,
